@@ -70,7 +70,7 @@ def train():
     neighbor_loader.reset_state()  # Start with an empty graph.
 
     n_id_obs = torch.empty(0, dtype=torch.long, device=device) # Generate empty tensor to remember all observed nodes so far.
-    z_exp_obs = torch.zeros(1, EMB_DIM, device=device) # Generate empty tensor to remember all expander embeddings so far.
+    z_exp_obs = torch.zeros(1, MEM_DIM, device=device) # Generate empty tensor to remember all expander embeddings so far.
 
     total_loss = 0
     for batch in tk(train_loader):
@@ -98,7 +98,7 @@ def train():
         assoc[n_id] = torch.arange(n_id.size(0), device=device)
 
         # Create input features z for TGNN forward pass
-        z = torch.zeros(n_id.size(0), EMB_DIM, device=device)
+        z = torch.zeros(n_id.size(0), MEM_DIM, device=device)
         z_exp = z_exp_obs[assoc1[n_id_seen]].detach() # Get expander embeddings for nodes that have been observed before.
         z[assoc[new_nodes]] = model['memory'](new_nodes)[0] # Get node states for new nodes.
         z[assoc[n_id_seen]] = z_exp # Get node states for nodes that have been observed before.
@@ -164,7 +164,7 @@ def test(loader, neg_sampler, split_mode):
     perf_list = []
 
     n_id_obs = torch.empty(0, dtype=torch.long, device=device) # Generate empty tensor to remember all observed nodes so far.
-    z_exp_obs = torch.zeros(1, EMB_DIM, device=device) # Generate empty tensor to remember all expander embeddings so far.
+    z_exp_obs = torch.zeros(1, MEM_DIM, device=device) # Generate empty tensor to remember all expander embeddings so far.
 
     for pos_batch in tk(loader):
         pos_src, pos_dst, pos_t, pos_msg = (
@@ -197,7 +197,7 @@ def test(loader, neg_sampler, split_mode):
             assoc[n_id] = torch.arange(n_id.size(0), device=device)
 
             # Get updated memory of all nodes involved in the computation.
-            z = torch.zeros(n_id.size(0), EMB_DIM, device=device)
+            z = torch.zeros(n_id.size(0), MEM_DIM, device=device)
             z_exp = z_exp_obs[assoc1[n_id_seen]].detach() # Get expander embeddings for nodes that have been observed before.
             
             neg_nodes = n_id[~torch.isin(n_id, n_id_seen)] # Identify new nodes that have not been observed before.
