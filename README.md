@@ -1,6 +1,7 @@
 # TGR
 
-[fig1_small.pdf](https://github.com/user-attachments/files/17433423/fig1_small.pdf)
+
+![fig1_small](https://github.com/user-attachments/assets/c41d6eba-18f7-42b9-8a6b-845f96a96b5a)
 
 
 ## Abstract 
